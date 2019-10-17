@@ -6,6 +6,7 @@ const Users = require("../users/userModel");
 const login = require("../middleware/login");
 const restricted = require("../middleware/restricted");
 
+const bcrypt = require("bcrypt");
 const generateToken = require("../tokens/generateToken");
 
 // GET all users
@@ -31,6 +32,27 @@ router.get("/users/:id", restricted, async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: error });
+  }
+});
+
+// POST to register
+router.post("/register", async (req, res) => {
+  const user = req.body;
+
+  if (!user.username || !user.password || !user.department) {
+    res
+      .status(400)
+      .json({ message: "Please provide a username, password, and department" });
+  } else {
+    try {
+      const newUser = await Users.add({
+        ...user,
+        password: bcrypt.hashSync(user.password, 8)
+      });
+      res.status(201).json(newUser);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to register user" });
+    }
   }
 });
 
