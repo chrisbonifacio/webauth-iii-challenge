@@ -9,9 +9,11 @@
     "server": "nodemon index.js"
   },
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "express": "^4.17.1",
     "global": "^4.4.0",
     "helmet": "^3.21.1",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.5",
     "sqlite3": "^4.1.0"
   },
