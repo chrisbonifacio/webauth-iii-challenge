@@ -26,10 +26,13 @@ function findBy(filter) {
     .where(filter);
 }
 
-function add(user) {
-  return db("users")
-    .insert(user)
-    .then(() => {
-      return findByUserName(user.username);
-    });
+async function add(user) {
+  const { username } = user;
+
+  try {
+    await db("users").insert(user);
+    return findBy({ username });
+  } catch (error) {
+    return { error: "username is already taken" };
+  }
 }
